@@ -5,9 +5,6 @@ var fs = require('fs'),
   path = require('path'),
   mimeTypes = {
     'html': 'text/html',
-    'jpeg': 'image/jpeg',
-    'jpg': 'image/jpeg',
-    'png': 'image/png',
     'js': 'text/javascript',
     'css': 'text/css'
   },

@@ -1,0 +1,16 @@
+{
+  "name": "chatter-js",
+  "version": "0.0.1",
+  "description": "chat application",
+  "repository": "https://github.com/dwolf555/chatterjs.git",
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-compress": "~0.6.1",
+    "grunt-contrib-imagemin": "~0.5.0",
+    "grunt-contrib-sass": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.0",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "socket.io": "0.9.16"
+  }
+}

@@ -1,0 +1,19 @@
+<dl ng-repeat="chat in chats">
+  <dt>{{chat.alias}} <span class="text-muted small">[{{chat.dateTime}}]</span></dt>
+  <dd>{{chat.body}}</dd>
+</dl>
+<form name="chatForm" novalidate>
+  <div class="row">
+    <div class="col-xs-2">
+      <div class="form-group" ng-class="{'has-error': $chatForm.alias.$invalid}">
+        <input type="text" class="form-control" name="alias" id="alias" placeholder="Alias" ng-model="chat.alias" required>
+      </div>
+    </div>
+    <div class="col-xs-8">
+      <input type="text" class="form-control" name="body" id="body" placeholder="Message" ng-model="chat.body" required>
+    </div>
+    <div class="col-xs-2">
+      <button type="submit" class="btn btn-primary" ng-click="send(chat)">Send</button>
+    </div>
+  </div>
+</form>

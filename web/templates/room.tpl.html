@@ -1,5 +1,5 @@
 <dl ng-repeat="chat in chats">
-  <dt>{{chat.alias}} <span class="text-muted small">[{{chat.dateTime}}]</span></dt>
+  <dt ng-class="{'text-primary':chat.isSender}">{{chat.alias}} <span class="text-muted small">[{{chat.dateTime}}]</span></dt>
   <dd>{{chat.body}}</dd>
 </dl>
 <form name="chatForm" novalidate>

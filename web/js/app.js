@@ -63,13 +63,17 @@ angular.module('chatterJS', ['ngRoute'])
       .on('chat', function (chat) {
         chat.dateTime = getDateTimeStr();
         $scope.$apply(function () {
-            $scope.chats.push(chat);
+          $scope.chats.push(chat);
         });
       })
       .emit('enter-room', {room: $location.path()});
 
     $scope.send = function (chat) {
+      chat.dateTime = getDateTimeStr();
+      chat.isSender = true;
+      $scope.chats.push(chat);
       socket.emit('chat', chat);
+      $scope.chat = {alias: chat.alias};
     };
 
   }]);

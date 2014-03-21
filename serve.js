@@ -9,6 +9,7 @@ var fs = require('fs'),
     'css': 'text/css'
   },
   httpHandler = function (req, res) {
+    // serve static files
     var uri = url.parse(req.url).pathname,
       filename = path.join(process.cwd() + '/web', uri);
 
@@ -35,16 +36,17 @@ app.listen(80);
 
 io.sockets.on('connection', function (socket) {
 
-  socket.on('roomchange', function (data) {
-    console.log(data);
+  socket.on('enter-room', function (data) {
+    socket.join(data.room);
   });
 
   socket.on('chat', function (data) {
-    console.log(data);
-  });
-
-  socket.on('disconnect', function (data) {
-    console.log(data);
+    var room;
+    for (room in socket.manager.rooms) {
+      if (room) {
+        socket.broadcast.to(room.substring(1)).emit('chat', data);
+      }
+    }
   });
 
 });

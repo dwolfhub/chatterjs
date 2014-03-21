@@ -50,7 +50,7 @@ angular.module('chatterJS', ['ngRoute'])
   .controller('AboutCtrl', ['$scope', function ($scope) {
     $scope.anything = 'possible';
   }])
-  .controller('RoomCtrl', ['$scope', 'getDateTimeStr', function ($scope, getDateTimeStr) {
+  .controller('RoomCtrl', ['$scope', '$location', 'getDateTimeStr', function ($scope, $location, getDateTimeStr) {
     $scope.chats = [
       {
         alias: 'Admin',
@@ -62,8 +62,11 @@ angular.module('chatterJS', ['ngRoute'])
     var socket = io.connect('http://localhost')
       .on('chat', function (chat) {
         chat.dateTime = getDateTimeStr();
-        $scope.chats.push(chat);
-      });
+        $scope.$apply(function () {
+            $scope.chats.push(chat);
+        });
+      })
+      .emit('enter-room', {room: $location.path()});
 
     $scope.send = function (chat) {
       socket.emit('chat', chat);

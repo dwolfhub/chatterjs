@@ -42,8 +42,10 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('chat', function (data) {
     var room;
-    for (room in socket.manager.rooms) {
+    // console.log(io.sockets.manager.roomClients[socket.id]);
+    for (room in io.sockets.manager.roomClients[socket.id]) {
       if (room) {
+        console.log(room.substring(1));
         socket.broadcast.to(room.substring(1)).emit('chat', data);
       }
     }

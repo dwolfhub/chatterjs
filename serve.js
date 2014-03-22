@@ -42,7 +42,6 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('chat', function (data) {
     var room;
-    // console.log(io.sockets.manager.roomClients[socket.id]);
     for (room in io.sockets.manager.roomClients[socket.id]) {
       if (room) {
         console.log(room.substring(1));

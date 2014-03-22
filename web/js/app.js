@@ -59,7 +59,7 @@ angular.module('chatterJS', ['ngRoute'])
       }
     ];
 
-    var socket = io.connect('http://localhost')
+    var socket = io.connect('/')
       .on('chat', function (chat) {
         chat.dateTime = getDateTimeStr();
         $scope.$apply(function () {

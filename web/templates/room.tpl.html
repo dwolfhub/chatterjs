@@ -1,21 +1,43 @@
-<dl ng-repeat="chat in chats">
-  <dt ng-class="{'text-primary':chat.isSender}">{{chat.alias}} <span class="text-muted small">[{{chat.dateTime}}]</span></dt>
-  <dd>{{chat.body}}</dd>
-</dl>
-<form name="chatForm" novalidate>
-  <div class="row">
-    <div class="col-md-2 col-sm-4">
-      <div class="form-group" ng-class="{'has-error': $chatForm.alias.$invalid}">
-        <input type="text" class="form-control" name="alias" id="alias" placeholder="Alias" ng-model="chat.alias" required>
+<div class="row">
+  <div class="col-sm-12 col-md-8 col-md-offset-2">
+    <h1>{{roomName}} <span class="badge pull-right">{{userCount}}</span></h1>
+    <div class="clearfix"></div>
+    <dl ng-repeat="chat in chats">
+      <dt ng-class="{'text-primary':chat.isSender}">{{chat.alias}} <span class="text-muted small">[{{chat.dateTime}}]</span></dt>
+      <dd>{{chat.body}}</dd>
+    </dl>
+    <form name="chatForm" class="form" role="form" novalidate>
+      <div class="row">
+        <div class="input-group bottom-margin-10">
+          <input type="text" class="form-control" name="body" id="body" placeholder="Message" ng-model="chat.body" required>
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" ng-click="send(chat)" ng-disabled="chatForm.$invalid"><i class="glyphicon glyphicon-send"></i> Send</button>
+          </span>
+        </div>
       </div>
-    </div>
-    <div class="col-md-8 col-sm-8">
-      <div class="input-group">
-        <input type="text" class="form-control" name="body" id="body" placeholder="Message" ng-model="chat.body" required>
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary" ng-click="send(chat)">Send</button>
-        </span>
+      <div class="row">
+        <button class="btn btn-default" data-toggle="modal" data-target=".alias-change-modal"><i class="glyphicon glyphicon-user"></i> Change Alias</button>
+        <button class="btn btn-default"><i class="glyphicon glyphicon-picture"></i> Send Image</button>
+      </div>
+    </form>
+    <div class="modal fade alias-change-modal">
+      <div class="modal-dialog modal-sm">
+        <form name="aliasForm" id="aliasForm" class="simple-form" novalidate>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Set Alias</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group" ng-class="{'has-error': aliasForm.alias.$invalid}">
+                <input type="text" class="form-control" name="alias" id="alias" placeholder="MyUserName5" ng-model="chat.alias" required autofocus>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" ng-disabled="aliasForm.$invalid"><i class="glyphicon glyphicon-user"></i> Set Alias</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-</form>
+</div>

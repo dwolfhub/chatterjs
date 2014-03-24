@@ -36,8 +36,21 @@ app.listen(80);
 
 io.sockets.on('connection', function (socket) {
 
-  socket.on('enter-room', function (data) {
-    socket.join(data.room);
+  socket.on('disconnect', function () {
+    var room;
+    for (room in io.sockets.manager.roomClients[socket.id]) {
+      if (room) {
+        socket.leave(room.substring(1));
+        io.sockets.in(room.substring(1))
+          .emit('user-count', io.sockets.clients(room.substring(1)).length);
+      }
+    }
+  });
+
+  socket.on('enter-room', function (room) {
+    socket.join(room);
+    io.sockets.in(room)
+      .emit('user-count', io.sockets.clients(room).length);
   });
 
   socket.on('chat', function (data) {

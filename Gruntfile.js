@@ -77,7 +77,7 @@ module.exports = function(grunt) {
     sass: {
       dev: {
         files: {
-          'web/css/styles.css' : 'web/sass/*'
+          'web/css/styles.css' : 'web/sass/main.scss'
         },
         options: {
           style: 'nested',

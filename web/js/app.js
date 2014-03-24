@@ -41,39 +41,70 @@ angular.module('chatterJS', ['ngRoute'])
       return [m, d, y].join('/') + ' ' + [h, i, s].join(':');
     };
   }])
-  .controller('HomeCtrl', ['$scope', function ($scope) {
-    $scope.anything = 'possible';
+  .factory('getRandomString', [function () {
+    return function (strLen) {
+      var str = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for(var i = 0; i < strLen; i++)
+          str += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return str;
+    };
   }])
+  .controller('NavCtrl',
+    ['$scope', 'getRandomString', function ($scope, getRandomString) {
+      $scope.randomUrl = getRandomString(10);
+    }]
+  )
+  .controller('HomeCtrl',
+    ['$scope', 'getRandomString', function ($scope, getRandomString) {
+      $scope.randomUrl = getRandomString(10);
+    }]
+  )
   .controller('TipsCtrl', ['$scope', function ($scope) {
     $scope.anything = 'possible';
   }])
   .controller('AboutCtrl', ['$scope', function ($scope) {
     $scope.anything = 'possible';
   }])
-  .controller('RoomCtrl', ['$scope', '$location', 'getDateTimeStr', function ($scope, $location, getDateTimeStr) {
-    $scope.chats = [
-      {
-        alias: 'Admin',
-        body: 'You are connected.',
-        dateTime: getDateTimeStr()
-      }
-    ];
+  .controller('RoomCtrl',
+    ['$scope', '$location', 'getDateTimeStr',
+      function ($scope, $location, getDateTimeStr) {
+        $scope.roomName = $location.path();
+        $scope.userCount = 0;
+        $scope.chats = [
+          {
+            alias: 'Admin',
+            body: 'You are connected.',
+            dateTime: getDateTimeStr()
+          }
+        ];
 
-    var socket = io.connect('/')
-      .on('chat', function (chat) {
-        chat.dateTime = getDateTimeStr();
-        $scope.$apply(function () {
+        var socket = io.connect('/')
+          .on('chat', function (chat) {
+            chat.dateTime = getDateTimeStr();
+            $scope.$apply(function () {
+              $scope.chats.push(chat);
+            });
+          })
+          .on('user-count', function (count) {
+            $scope.$apply(function () {
+              $scope.userCount = count;
+            });
+          })
+          .emit('enter-room', $location.path());
+
+        $scope.send = function (chat) {
+          chat.dateTime = getDateTimeStr();
+          socket.emit('chat', chat);
+          chat.isSender = true;
           $scope.chats.push(chat);
-        });
-      })
-      .emit('enter-room', {room: $location.path()});
+          $scope.chat = {alias: chat.alias};
+        };
 
-    $scope.send = function (chat) {
-      chat.dateTime = getDateTimeStr();
-      chat.isSender = true;
-      $scope.chats.push(chat);
-      socket.emit('chat', chat);
-      $scope.chat = {alias: chat.alias};
-    };
-
-  }]);
+        // show alias modal on load
+        $('.alias-change-modal').modal('show');
+      }
+    ]
+  );

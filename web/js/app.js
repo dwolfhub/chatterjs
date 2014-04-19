@@ -1,8 +1,33 @@
 'use strict';
 
+
+/* Google Analytics */
+var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-50134363-1']);
+  _gaq.push(['_gat._forceSSL']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+/* App */
 angular.module('chatterJS', ['ngRoute'])
+  .run(['analytics', function () {
+    return true;
+  }])
+  .service('analytics', [
+    '$rootScope', '$window', '$location', function($rootScope, $window, $location) {
+      // track page view on content loaded
+      $rootScope.$on('$viewContentLoaded', function() {
+        $window._gaq.push(['_trackPageview', $location.path()]);
+      });
+    }
+  ])
   .config(['$routeProvider', '$locationProvider',
     function ($routeProvider, $locationProvider) {
+
       $locationProvider.html5Mode(true);
       $routeProvider.when('/', {
           templateUrl: 'templates/home.tpl.html',
@@ -71,6 +96,7 @@ angular.module('chatterJS', ['ngRoute'])
   .controller('RoomCtrl',
     ['$scope', '$location', 'getDateTimeStr',
       function ($scope, $location, getDateTimeStr) {
+
         $scope.roomName = $location.path();
         $scope.userCount = 0;
         $scope.chats = [

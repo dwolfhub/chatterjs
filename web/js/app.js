@@ -19,7 +19,6 @@ angular.module('chatterJS', ['ngRoute'])
   }])
   .service('analytics', [
     '$rootScope', '$window', '$location', function($rootScope, $window, $location) {
-      // track page view on content loaded
       $rootScope.$on('$viewContentLoaded', function() {
         $window._gaq.push(['_trackPageview', $location.path()]);
       });
